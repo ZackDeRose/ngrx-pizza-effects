@@ -5,8 +5,8 @@ import { PizzaComponent } from './pizza/pizza.component';
 import { StoreModule } from '@ngrx/store';
 import { reducer, PIZZA_FEATURE_NAME } from './pizza.store';
 import { ReactiveComponentModule } from '@ngrx/component';
-import { HomeComponent } from './home/home.component';
 import { RouterModule } from '@angular/router';
+import { HomeComponent } from './home/home.component';
 
 @NgModule({
   declarations: [AppComponent, PizzaComponent, HomeComponent],
