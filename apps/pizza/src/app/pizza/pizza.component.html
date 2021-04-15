@@ -13,3 +13,9 @@
 </ng-container>
 
 <h1>Price: ${{ price$ | async }}</h1>
+
+<ng-container *ngrxLet="requestPending$ as requestPending">
+  <button [disabled]="requestPending" (click)="buyNowClick()">
+    {{ requestPending ? 'Request Pending...' : 'Order Now!!' }}
+  </button>
+</ng-container>

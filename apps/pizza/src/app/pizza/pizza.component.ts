@@ -7,8 +7,10 @@ import {
   hasSausage,
   removePepperoni,
   removeSausage,
+  requestPending,
   selectPizzaImage,
   selectPizzaPrice,
+  userClicksOrderNow,
 } from '../pizza.store';
 
 @Component({
@@ -16,15 +18,14 @@ import {
   templateUrl: './pizza.component.html',
   styleUrls: ['./pizza.component.scss'],
 })
-export class PizzaComponent implements OnInit {
+export class PizzaComponent {
   imgUrl$ = this._store.select(selectPizzaImage);
   price$ = this._store.select(selectPizzaPrice);
   hasPepperoni$ = this._store.select(hasPepperoni);
   hasSausage$ = this._store.select(hasSausage);
+  requestPending$ = this._store.select(requestPending);
 
   constructor(private _store: Store) {}
-
-  ngOnInit(): void {}
 
   pepperoniClick(hasPepperoni: boolean) {
     this._store.dispatch(hasPepperoni ? removePepperoni() : addPepperoni());
@@ -32,5 +33,9 @@ export class PizzaComponent implements OnInit {
 
   sausageClick(hasSausage: boolean) {
     this._store.dispatch(hasSausage ? removeSausage() : addSausage());
+  }
+
+  buyNowClick() {
+    this._store.dispatch(userClicksOrderNow());
   }
 }

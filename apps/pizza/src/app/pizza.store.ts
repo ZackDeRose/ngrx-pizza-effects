@@ -4,6 +4,7 @@ import {
   createReducer,
   createSelector,
   on,
+  props,
 } from '@ngrx/store';
 
 // actions
@@ -12,23 +13,38 @@ export const addPepperoni = createAction('[Pizza Detail] Add Pepperoni');
 export const removePepperoni = createAction('[Pizza Detail] Remove Pepperoni');
 export const addSausage = createAction('[Pizza Detail] Add Sausage');
 export const removeSausage = createAction('[Pizza Detail] Remove Sausage');
+export const userClicksOrderNow = createAction('[Pizza Detail] Order Now');
+export const apiRespondsWithSuccess = createAction(
+  '[Pizza API] Responded with success'
+);
+export const apiRespondsWithFailure = createAction(
+  '[Pizza API] Responded with failure',
+  props<{ reason: string }>()
+);
 
 // reducer
 
-interface PizzaState {
+export interface PizzaState {
   hasPepperoni: boolean;
   hasSausage: boolean;
+  requestPending: boolean;
 }
 const initialState: PizzaState = {
   hasPepperoni: false,
   hasSausage: false,
+  requestPending: false,
 };
 export const reducer = createReducer<PizzaState>(
   initialState,
   on(addPepperoni, (state) => ({ ...state, hasPepperoni: true })),
   on(removePepperoni, (state) => ({ ...state, hasPepperoni: false })),
   on(addSausage, (state) => ({ ...state, hasSausage: true })),
-  on(removeSausage, (state) => ({ ...state, hasSausage: false }))
+  on(removeSausage, (state) => ({ ...state, hasSausage: false })),
+  on(userClicksOrderNow, (state) => ({ ...state, requestPending: true })),
+  on(apiRespondsWithSuccess, apiRespondsWithFailure, (state) => ({
+    ...state,
+    requestPending: false,
+  }))
 );
 
 // selectors
@@ -63,7 +79,7 @@ function determinePrice({ hasPepperoni, hasSausage }: PizzaState): number {
   );
 }
 
-const pizzaFeatureSelector = createFeatureSelector<PizzaState>(
+export const pizzaFeatureSelector = createFeatureSelector<PizzaState>(
   PIZZA_FEATURE_NAME
 );
 export const selectPizzaImage = createSelector(
@@ -81,4 +97,8 @@ export const hasPepperoni = createSelector(
 export const hasSausage = createSelector(
   pizzaFeatureSelector,
   (pizzaState) => pizzaState.hasSausage
+);
+export const requestPending = createSelector(
+  pizzaFeatureSelector,
+  (pizzaState) => pizzaState.requestPending
 );
